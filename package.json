@@ -9,7 +9,9 @@
     "dbcreate": "npx sequelize-cli db:create",
     "dbdrop": "npx sequelize-cli db:drop",
     "migall": "npx sequelize-cli db:migrate",
-    "miguna": "npx sequelize-cli db:migrate:undo:all"
+    "miguna": "npx sequelize-cli db:migrate:undo:all",
+    "seedall": "npx sequelize-cli db:seed:all",
+    "seeduna": "npx sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "",
