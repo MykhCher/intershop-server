@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./index.js",
     "dbcreate": "npx sequelize-cli db:create",
-    "dbdrop": "npx sequelize-cli db:drop"
+    "dbdrop": "npx sequelize-cli db:drop",
+    "migall": "npx sequelize-cli db:migrate",
+    "miguna": "npx sequelize-cli db:migrate:undo:all"
   },
   "keywords": [],
   "author": "",

@@ -17,9 +17,15 @@ const isSecure = Number(process.env.SERVER_IS_SECURE);
 const server = http.createServer(app);
 
 server.listen(port, hostName, () => {
-    const address = `http${isSecure ? 's' : ''}://${hostName}:${port}`
+    const address = `http${isSecure ? 's' : ''}://${hostName}:${port}`;
+
     console.log(`Server listening to ${address}`);
+
     db.sequelize.authenticate()
-        .then(() => {console.log('Database connection was successfully established!')})
-        .catch(err => {console.log(`Database connection error: ${err.message}`)});
+        .then(() => {
+            console.log('Database connection was successfully established!')
+        })
+        .catch(err => {
+            console.log(`Database connection error: ${err.message}`)
+        });
 });
