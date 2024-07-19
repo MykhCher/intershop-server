@@ -18,13 +18,8 @@ class ItemController {
     getItemsById(req, res) {
         try {
             const { itemId } = req.params;
-            db.Item.findAll({
-                where: {
-                    id: itemId
-                } 
-            })
-                .then(items => {
-                    const [item] = items;
+            db.Item.findByPk(itemId)
+                .then(item => {
                     res.status(item ? 200 : 404).json(item ?? `item id=${itemId} not found`);
                 })
         } catch (error) {
