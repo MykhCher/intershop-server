@@ -21,6 +21,9 @@ module.exports = {
           key: 'id'
         },
         allowNull: false,
+      },
+      amount: {
+        type: Sequelize.INTEGER
       }
     });
   },
