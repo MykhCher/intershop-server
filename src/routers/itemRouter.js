@@ -1,4 +1,4 @@
-const { getAllItems, getItemsById } = require('../controllers/itemsController');
+const { getAllItems, getItemsById, createItem } = require('../controllers/itemsController');
 
 const Router = require('express');
 
@@ -6,7 +6,8 @@ const Router = require('express');
 const itemRouter = new Router();
 
 itemRouter.route('/')
-    .get(getAllItems);
+    .get(getAllItems)
+    .post(createItem);
 
 itemRouter.route('/:itemId')
     .get(getItemsById);

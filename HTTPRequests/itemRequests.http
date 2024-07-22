@@ -1,4 +1,12 @@
 GET http://127.0.0.1:5000/items/ 
 ###
-GET http://127.0.0.1:5000/items/1
+GET http://127.0.0.1:5000/items/98
 ###
+POST http://127.0.0.1:5000/items/
+Content-Type: application/json
+
+    {
+        "price": -200
+    }
+###
+GET http://127.0.0.1:5000/error/ 
