@@ -1,4 +1,4 @@
-const { getAllItems, getItemsById, createItem } = require('../controllers/itemsController');
+const itemController = require('../controllers/itemsController');
 
 const Router = require('express');
 
@@ -6,11 +6,13 @@ const Router = require('express');
 const itemRouter = new Router();
 
 itemRouter.route('/')
-    .get(getAllItems)
-    .post(createItem);
+    .get(itemController.getAllItems)
+    .post(itemController.createItem)
+    .put(itemController.updateItem);
 
 itemRouter.route('/:itemId')
-    .get(getItemsById);
+    .get(itemController.getItemsById)
+    .delete(itemController.deleteItem);
 
 
 module.exports = itemRouter

@@ -1,12 +1,32 @@
 GET http://127.0.0.1:5000/items/ 
 ###
-GET http://127.0.0.1:5000/items/98
+GET http://127.0.0.1:5000/items/43
 ###
 POST http://127.0.0.1:5000/items/
 Content-Type: application/json
 
     {
-        "price": -200
+        "price": 200,
+        "amount": 1,
+        "brandId": 1,
+        "modelId": 1,
+        "categoryId": 1,
+        "typeId": 1,
+        "storeId": 1
     }
 ###
-GET http://127.0.0.1:5000/error/ 
+PUT http://127.0.0.1:5000/items/
+Content-Type: application/json
+
+    {
+        "id": 43,
+        "price": 2000,
+        "amount": 1,
+        "brandId": 1,
+        "modelId": 1,
+        "categoryId": 1,
+        "typeId": 1,
+        "storeId": 1
+    }
+###
+DELETE http://127.0.0.1:5000/items/46

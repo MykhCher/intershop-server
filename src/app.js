@@ -13,13 +13,6 @@ app.use(morgan('dev'));
 
 app.use('/', shopRouter);
 
-app.get('/error/', (req, res, next) => {
-    try {
-        throw new Error('Test error');
-    } catch (error) {
-        next(error)
-    }
-})
 app.use(sequelizeErrorHandler, errorHandler);
 
 
