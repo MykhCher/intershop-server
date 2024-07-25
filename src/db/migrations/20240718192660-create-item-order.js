@@ -7,6 +7,8 @@ module.exports = {
       itemId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Items',
           key: 'id'
@@ -16,6 +18,8 @@ module.exports = {
       orderId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
         references: {
           model: 'Orders',
           key: 'id'
