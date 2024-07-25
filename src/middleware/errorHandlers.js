@@ -1,5 +1,15 @@
 const { Sequelize: { BaseError } } = require('../db/models');
+const { yup } = require('../utils/schemas');
 
+module.exports.yupValidationErrorHandler = (err, req, res, next) => {
+    if(err instanceof yup.ValidationError){
+        return res.status(500).send({
+            title: 'Yup Validation error', 
+            details: err.errors,
+        })
+    }
+    next(err);
+}
 module.exports.sequelizeErrorHandler = (err, req, res, next) => {
     if (err instanceof BaseError) {
         return res.status(500).send({

@@ -1,5 +1,7 @@
 const yup = require('yup');
 
+module.exports.yup = yup;
+
 const nameScheme = yup.string().trim().min(2).max(255).required();
 
 module.exports.customerValidationSchema = yup.object().shape({
