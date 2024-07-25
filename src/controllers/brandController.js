@@ -1,17 +1,33 @@
-const db = require('../db/models');
+const { Brand, Sequelize: { Op } } = require('../db/models');
 
 class BrandController {
     getAllBrands(req, res, next) {
-        db.Brand.findAll( {limit: 10} )
+        Brand.findAll( {limit: 10} )
             .then(brands => {
                 res.status(200).send(brands);
             })
             .catch(err => next(err));
     }
 
+    getBrandsPartially(req, res, next) {
+        Brand.count()
+            .then(count => {
+                Brand.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(brands => {
+                    res.status(200).json(brands);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getBrandsById(req, res, next) {
         const { brandId } = req.params;
-        db.Brand.findByPk(brandId)
+        Brand.findByPk(brandId)
             .then(brand => {
                 res.status(brand ? 200 : 404).json(brand ?? `brand id=${brandId} not found`);
             })
@@ -20,7 +36,7 @@ class BrandController {
 
     createBrand(req, res, next) {
         const { body } = req;
-        db.Brand.create(body, {
+        Brand.create(body, {
             returning: '*'
         })
             .then(brand => {
@@ -35,7 +51,7 @@ class BrandController {
             return res.status(404).send('Can\'t find brand. Please provide id in request body.');
         }
 
-        db.Brand.update(req.body, {
+        Brand.update(req.body, {
             where: {
                 id: Number(brandId)
             }
@@ -52,7 +68,7 @@ class BrandController {
     deleteBrand(req, res, next) {
         const { params: {brandId }} = req;
         
-        db.Brand.destroy({
+        Brand.destroy({
             where: {
                 id: brandId
             }
