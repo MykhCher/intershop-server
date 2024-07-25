@@ -1,4 +1,5 @@
 const customerController = require('../controllers/customerController');
+const { validateCustomer } = require('../middleware/validate.mw');
 
 const Router = require('express');
 
@@ -7,8 +8,8 @@ const customerRouter = new Router();
 
 customerRouter.route('/')
     .get(customerController.getAllCustomers)
-    .post(customerController.createCustomer)
-    .put(customerController.updateCustomer);
+    .post(validateCustomer, customerController.createCustomer)
+    .put(validateCustomer, customerController.updateCustomer);
 
 customerRouter.route('/:customerId')
     .get(customerController.getCustomersById)

@@ -1,4 +1,5 @@
 const brandController = require('../controllers/brandController');
+const { validateInstance } = require('../middleware/validate.mw');
 
 const Router = require('express');
 
@@ -7,8 +8,8 @@ const brandRouter = new Router();
 
 brandRouter.route('/')
     .get(brandController.getAllBrands)
-    .post(brandController.createBrand)
-    .put(brandController.updateBrand);
+    .post(validateInstance, brandController.createBrand)
+    .put(validateInstance, brandController.updateBrand);
 
 brandRouter.route('/:brandId')
     .get(brandController.getBrandsById)
