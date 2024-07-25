@@ -21,7 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     date: DataTypes.DATE,
-    paid: DataTypes.BOOLEAN
+    paid: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'Order',
