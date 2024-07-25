@@ -1,0 +1,20 @@
+GET http://127.0.0.1:5000/orders/ 
+###
+GET http://127.0.0.1:5000/orders/16
+###
+POST http://127.0.0.1:5000/orders/
+Content-Type: application/json
+
+    {
+        "code": -20
+    }
+###
+PUT http://127.0.0.1:5000/orders/
+Content-Type: application/json
+
+    {
+        "id": 14,
+        "code": 78
+    }
+###
+DELETE http://127.0.0.1:5000/orders/15

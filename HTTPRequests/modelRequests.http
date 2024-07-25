@@ -1,12 +1,13 @@
 GET http://127.0.0.1:5000/models/ 
 ###
-GET http://127.0.0.1:5000/models/34
+GET http://127.0.0.1:5000/models/22
 ###
 POST http://127.0.0.1:5000/models/
 Content-Type: application/json
 
     {
-        "title": "asdfgk"
+        "title": "HP440",
+        "brandId": 19
     }
 ###
 PUT http://127.0.0.1:5000/models/

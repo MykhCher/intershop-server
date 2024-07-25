@@ -1,0 +1,23 @@
+GET http://127.0.0.1:5000/customers/ 
+###
+GET http://127.0.0.1:5000/customers/10
+###
+POST http://127.0.0.1:5000/customers/
+Content-Type: application/json
+
+    {
+        "full_name": "Taras Yaremiy",
+        "password": "my-secret-password",
+        "email": "t-y@ex.com"
+    }
+###
+PUT http://127.0.0.1:5000/customers/
+Content-Type: application/json
+
+    {
+        "id": 9,
+        "full_name": "John Doe",
+        "email": "johndoe@example.com"
+    }
+###
+DELETE http://127.0.0.1:5000/customers/10

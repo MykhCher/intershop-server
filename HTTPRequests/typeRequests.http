@@ -1,0 +1,21 @@
+GET http://127.0.0.1:5000/types/ 
+###
+GET http://127.0.0.1:5000/types/10
+###
+POST http://127.0.0.1:5000/types/
+Content-Type: application/json
+
+    {
+        "title": "Test Type"
+    }
+###
+PUT http://127.0.0.1:5000/types/
+Content-Type: application/json
+
+    {
+        "id": 10,
+        "title": "Altered Type",
+        "description": 1
+    }
+###
+DELETE http://127.0.0.1:5000/types/10
