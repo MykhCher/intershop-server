@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class TypeController {
     getAllTypes(req, res, next) {
-        db.Type.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Type.findAll( {limit, offset} )
             .then(types => {
                 res.status(200).send(types);
             })

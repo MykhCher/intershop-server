@@ -44,3 +44,9 @@ module.exports.itemValidationSchema = yup.object().shape({
     storeId: yup.number().integer().positive(),
     typeId: yup.number().integer().positive()
 })
+
+module.exports.paginationSchema = yup.object().shape({
+    limit: yup.number().integer().min(1).max(100).required(),
+    offset: yup.number().integer().required().min(0),
+})
+ 

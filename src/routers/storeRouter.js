@@ -1,5 +1,5 @@
 const storeController = require('../controllers/storeController');
-const { validateInstance } = require('../middleware/validate.mw');
+const { validators: { validateInstance }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const storeRouter = new Router();
 
 storeRouter.route('/')
-    .get(storeController.getAllStores)
+    .get(paginate, storeController.getAllStores)
     .post(validateInstance, storeController.createStore)
     .put(validateInstance, storeController.updateStore);
 

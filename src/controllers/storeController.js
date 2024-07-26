@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class StoreController {
     getAllStores(req, res, next) {
-        db.Store.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Store.findAll( {limit, offset} )
             .then(stores => {
                 res.status(200).send(stores);
             })

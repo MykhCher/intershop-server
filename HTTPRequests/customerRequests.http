@@ -1,7 +1,13 @@
-GET http://127.0.0.1:5000/customers/ 
-###
+### Paginate elements
+
+GET http://127.0.0.1:5000/customers/?page=2&result=5
+
+### Get single element by ID
+
 GET http://127.0.0.1:5000/customers/10
-###
+
+### Create new element
+
 POST http://127.0.0.1:5000/customers/
 Content-Type: application/json
 
@@ -10,7 +16,9 @@ Content-Type: application/json
         "password": "my-secret-password",
         "email": "t-yx.com"
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/customers/
 Content-Type: application/json
 
@@ -19,5 +27,7 @@ Content-Type: application/json
         "full_name": "John Doe",
         "email": "johndoe@example.com"
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/customers/10

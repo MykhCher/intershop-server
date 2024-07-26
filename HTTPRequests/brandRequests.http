@@ -1,14 +1,26 @@
+### Get half of elements 
+
 GET http://127.0.0.1:5000/brands/part
-###
-GET http://127.0.0.1:5000/brands/34
-###
+
+### Paginate elements
+
+GET http://127.0.0.1:5000/brands?page=3&result=6
+
+### Get single element by ID
+
+GET http://127.0.0.1:5000/brands/1
+
+### Create new element
+
 POST http://127.0.0.1:5000/brands/
 Content-Type: application/json
 
     {
         "title": "Asus"
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/brands/
 Content-Type: application/json
 
@@ -16,5 +28,7 @@ Content-Type: application/json
         "id": 34,
         "title": "Hator"
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/brands/19

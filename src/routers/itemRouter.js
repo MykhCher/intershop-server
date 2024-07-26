@@ -1,5 +1,5 @@
 const itemController = require('../controllers/itemsController');
-const { validateItem } = require('../middleware/validate.mw');
+const { validators: { validateItem }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const itemRouter = new Router();
 
 itemRouter.route('/')
-    .get(itemController.getAllItems)
+    .get(paginate, itemController.getAllItems)
     .post(validateItem, itemController.createItem)
     .put(validateItem, itemController.updateItem);
 

@@ -1,7 +1,13 @@
-GET http://127.0.0.1:5000/items/ 
-###
+### Paginate elements
+
+GET http://127.0.0.1:5000/items/?page=3&result=6 
+
+### Get single element by ID
+
 GET http://127.0.0.1:5000/items/47
-###
+
+### Create new element
+
 POST http://127.0.0.1:5000/items/
 Content-Type: application/json
 
@@ -14,7 +20,9 @@ Content-Type: application/json
         "typeId": 1,
         "storeId": 1
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/items/
 Content-Type: application/json
 
@@ -28,5 +36,7 @@ Content-Type: application/json
         "typeId": 1,
         "storeId": 1
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/items/46

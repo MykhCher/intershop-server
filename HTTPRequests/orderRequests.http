@@ -1,14 +1,22 @@
-GET http://127.0.0.1:5000/orders/ 
-###
+### Paginate elements
+
+GET http://127.0.0.1:5000/orders/?page=2&result=6 
+
+### Get single element by ID
+
 GET http://127.0.0.1:5000/orders/16
-###
+
+### Create new element
+
 POST http://127.0.0.1:5000/orders/
 Content-Type: application/json
 
     {
         "code": -20
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/orders/
 Content-Type: application/json
 
@@ -16,5 +24,7 @@ Content-Type: application/json
         "id": 14,
         "code": 78
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/orders/15

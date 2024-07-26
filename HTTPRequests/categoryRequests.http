@@ -1,14 +1,22 @@
-GET http://127.0.0.1:5000/categories/ 
-###
+### Paginate elements
+
+GET http://127.0.0.1:5000/categories/?page=1&result=3
+
+### Get single element by ID
+
 GET http://127.0.0.1:5000/categories/6
-###
+
+### Create new element
+
 POST http://127.0.0.1:5000/categories/
 Content-Type: application/json
 
     {
         "title": "Devices"
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/categories/
 Content-Type: application/json
 
@@ -16,5 +24,7 @@ Content-Type: application/json
         "id": 6,
         "title": "Miscellanious"
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/categories/6

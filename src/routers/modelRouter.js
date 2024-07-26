@@ -1,5 +1,5 @@
 const modelController = require('../controllers/modelsController');
-const { validateInstance } = require('../middleware/validate.mw');
+const { validators: { validateInstance }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const modelRouter = new Router();
 
 modelRouter.route('/')
-    .get(modelController.getAllModels)
+    .get(paginate, modelController.getAllModels)
     .post(validateInstance, modelController.createModel)
     .put(validateInstance, modelController.updateModel);
 

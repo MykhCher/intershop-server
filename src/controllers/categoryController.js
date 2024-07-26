@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class CategoryController {
     getAllCategories(req, res, next) {
-        db.Category.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Category.findAll( {limit, offset} )
             .then(categories => {
                 res.status(200).send(categories);
             })

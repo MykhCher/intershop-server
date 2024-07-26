@@ -1,5 +1,5 @@
 const categoryController = require('../controllers/categoryController');
-const { validateInstance } = require('../middleware/validate.mw');
+const { validators: { validateInstance }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const categoryRouter = new Router();
 
 categoryRouter.route('/')
-    .get(categoryController.getAllCategories)
+    .get(paginate, categoryController.getAllCategories)
     .post(validateInstance, categoryController.createCategory)
     .put(validateInstance, categoryController.updateCategory);
 

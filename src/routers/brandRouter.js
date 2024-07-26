@@ -1,5 +1,5 @@
 const brandController = require('../controllers/brandController');
-const { validateInstance } = require('../middleware/validate.mw');
+const { validators: { validateInstance }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const brandRouter = new Router();
 
 brandRouter.route('/')
-    .get(brandController.getAllBrands)
+    .get(paginate, brandController.getAllBrands)
     .post(validateInstance, brandController.createBrand)
     .put(validateInstance, brandController.updateBrand);
 

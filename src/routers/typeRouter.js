@@ -1,5 +1,5 @@
 const typeController = require('../controllers/typeController');
-const { validateInstance } = require('../middleware/validate.mw');
+const { validators: { validateInstance }, paginate } = require('../middleware');
 
 const Router = require('express');
 
@@ -7,7 +7,7 @@ const Router = require('express');
 const typeRouter = new Router();
 
 typeRouter.route('/')
-    .get(typeController.getAllTypes)
+    .get(paginate, typeController.getAllTypes)
     .post(validateInstance, typeController.createType)
     .put(validateInstance, typeController.updateType);
 

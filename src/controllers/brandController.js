@@ -2,7 +2,8 @@ const { Brand, Sequelize: { Op } } = require('../db/models');
 
 class BrandController {
     getAllBrands(req, res, next) {
-        Brand.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        Brand.findAll({limit, offset})
             .then(brands => {
                 res.status(200).send(brands);
             })

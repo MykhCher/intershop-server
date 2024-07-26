@@ -1,14 +1,22 @@
-GET http://127.0.0.1:5000/stores/ 
-###
+### Paginate elements
+
+GET http://127.0.0.1:5000/stores/?page=2&result=2
+
+### Get single element by ID
+
 GET http://127.0.0.1:5000/stores/5
-###
+
+### Create new element
+
 POST http://127.0.0.1:5000/stores/
 Content-Type: application/json
 
     {
         "title": "Test Store"
     }
-###
+
+### Change element by ID
+
 PUT http://127.0.0.1:5000/stores/
 Content-Type: application/json
 
@@ -16,5 +24,7 @@ Content-Type: application/json
         "id": 5,
         "title": "Altered Store"
     }
-###
+
+### Delete element by ID
+
 DELETE http://127.0.0.1:5000/stores/5

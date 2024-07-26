@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class ItemController {
     getAllItems(req, res, next) {
-        db.Item.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Item.findAll( {limit, offset} )
             .then(items => {
                 res.status(200).send(items);
             })

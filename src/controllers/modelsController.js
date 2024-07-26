@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class ModelController {
     getAllModels(req, res, next) {
-        db.Model.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Model.findAll( {limit, offset} )
             .then(models => {
                 res.status(200).send(models);
             })

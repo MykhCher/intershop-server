@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class CustomerController {
     getAllCustomers(req, res, next) {
-        db.Customer.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Customer.findAll( {limit, offset} )
             .then(customers => {
                 res.status(200).send(customers);
             })

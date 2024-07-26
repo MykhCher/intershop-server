@@ -2,7 +2,8 @@ const db = require('../db/models');
 
 class OrderController {
     getAllOrders(req, res, next) {
-        db.Order.findAll( {limit: 10} )
+        const { limit, offset } = req.pagination;
+        db.Order.findAll( {limit, offset} )
             .then(orders => {
                 res.status(200).send(orders);
             })
