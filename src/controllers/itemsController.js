@@ -5,7 +5,7 @@ class ItemController {
         const { limit, offset } = req.pagination;
         Item.findAll( {limit, offset} )
             .then(items => {
-                res.status(200).send(items);
+                res.status(200).send(items[0] ? items : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

@@ -5,7 +5,7 @@ class TypeController {
         const { limit, offset } = req.pagination;
         Type.findAll( {limit, offset} )
             .then(types => {
-                res.status(200).send(types);
+                res.status(200).send(types[0] ? types : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

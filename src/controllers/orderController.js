@@ -5,7 +5,7 @@ class OrderController {
         const { limit, offset } = req.pagination;
         Order.findAll( {limit, offset} )
             .then(orders => {
-                res.status(200).send(orders);
+                res.status(200).send(orders[0] ? orders : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

@@ -5,7 +5,7 @@ class StoreController {
         const { limit, offset } = req.pagination;
         Store.findAll( {limit, offset} )
             .then(stores => {
-                res.status(200).send(stores);
+                res.status(200).send(stores[0] ? stores : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

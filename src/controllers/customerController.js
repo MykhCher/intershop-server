@@ -5,7 +5,7 @@ class CustomerController {
         const { limit, offset } = req.pagination;
         Customer.findAll( {limit, offset} )
             .then(customers => {
-                res.status(200).send(customers);
+                res.status(200).send(customers[0] ? customers : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

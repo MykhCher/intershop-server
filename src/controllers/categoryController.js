@@ -5,7 +5,7 @@ class CategoryController {
         const { limit, offset } = req.pagination;
         Category.findAll( {limit, offset} )
             .then(categories => {
-                res.status(200).send(categories);
+                res.status(200).send(categories[0] ? categories : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

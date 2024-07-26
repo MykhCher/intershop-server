@@ -5,7 +5,7 @@ class BrandController {
         const { limit, offset } = req.pagination;
         Brand.findAll({limit, offset})
             .then(brands => {
-                res.status(200).send(brands);
+                res.status(200).send(brands[0] ? brands : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }

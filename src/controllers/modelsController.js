@@ -5,7 +5,7 @@ class ModelController {
         const { limit, offset } = req.pagination;
         Model.findAll( {limit, offset} )
             .then(models => {
-                res.status(200).send(models);
+                res.status(200).send(models[0] ? models : 'It seems to be empty here... \nPlease, try different request');
             })
             .catch(err => next(err));
     }
