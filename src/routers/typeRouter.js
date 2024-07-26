@@ -11,6 +11,8 @@ typeRouter.route('/')
     .post(validateInstance, typeController.createType)
     .put(validateInstance, typeController.updateType);
 
+typeRouter.get('/part', typeController.getTypesPartially);
+
 typeRouter.route('/:typeId')
     .get(typeController.getTypesById)
     .delete(typeController.deleteType);

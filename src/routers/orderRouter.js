@@ -11,6 +11,8 @@ orderRouter.route('/')
     .post(validateOrder, orderController.createOrder)
     .put(validateOrder, orderController.updateOrder);
 
+orderRouter.get('/part', orderController.getOrdersPartially);
+
 orderRouter.route('/:orderId')
     .get(orderController.getOrdersById)
     .delete(orderController.deleteOrder);

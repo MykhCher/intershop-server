@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Store, Sequelize: { Op } } = require('../db/models');
 
 class StoreController {
     getAllStores(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Store.findAll( {limit, offset} )
+        Store.findAll( {limit, offset} )
             .then(stores => {
                 res.status(200).send(stores);
             })
             .catch(err => next(err));
     }
 
+    getStoresPartially(req, res, next) {
+        Store.count()
+            .then(count => {
+                Store.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(stores => {
+                    res.status(200).json(stores);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getStoresById(req, res, next) {
         const { storeId } = req.params;
-        db.Store.findByPk(storeId)
+        Store.findByPk(storeId)
             .then(store => {
                 res.status(store ? 200 : 404).json(store ?? `store id=${storeId} not found`);
             })
@@ -21,7 +37,7 @@ class StoreController {
 
     createStore(req, res, next) {
         const { body } = req;
-        db.Store.create(body, {
+        Store.create(body, {
             returning: '*'
         })
             .then(store => {
@@ -36,7 +52,7 @@ class StoreController {
             return res.status(404).send('Can\'t find store. Please provide id in request body.');
         }
 
-        db.Store.update(req.body, {
+        Store.update(req.body, {
             where: {
                 id: Number(storeId)
             }
@@ -53,7 +69,7 @@ class StoreController {
     deleteStore(req, res, next) {
         const { params: {storeId }} = req;
         
-        db.Store.destroy({
+        Store.destroy({
             where: {
                 id: storeId
             }

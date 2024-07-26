@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Order, Sequelize: { Op } } = require('../db/models');
 
 class OrderController {
     getAllOrders(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Order.findAll( {limit, offset} )
+        Order.findAll( {limit, offset} )
             .then(orders => {
                 res.status(200).send(orders);
             })
             .catch(err => next(err));
     }
 
+    getOrdersPartially(req, res, next) {
+        Order.count()
+            .then(count => {
+                Order.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(orders => {
+                    res.status(200).json(orders);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getOrdersById(req, res, next) {
         const { orderId } = req.params;
-        db.Order.findByPk(orderId)
+        Order.findByPk(orderId)
             .then(order => {
                 res.status(order ? 200 : 404).json(order ?? `order id=${orderId} not found`);
             })
@@ -21,7 +37,7 @@ class OrderController {
 
     createOrder(req, res, next) {
         const { body } = req;
-        db.Order.create(body, {
+        Order.create(body, {
             returning: '*'
         })
             .then(order => {
@@ -36,7 +52,7 @@ class OrderController {
             return res.status(404).send('Can\'t find order. Please provide id in request body.');
         }
 
-        db.Order.update(req.body, {
+        Order.update(req.body, {
             where: {
                 id: Number(orderId)
             }
@@ -53,7 +69,7 @@ class OrderController {
     deleteOrder(req, res, next) {
         const { params: {orderId }} = req;
         
-        db.Order.destroy({
+        Order.destroy({
             where: {
                 id: orderId
             }

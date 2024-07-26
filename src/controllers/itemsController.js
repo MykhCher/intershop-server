@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Item, Sequelize: { Op } } = require('../db/models');
 
 class ItemController {
     getAllItems(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Item.findAll( {limit, offset} )
+        Item.findAll( {limit, offset} )
             .then(items => {
                 res.status(200).send(items);
             })
             .catch(err => next(err));
     }
 
+    getItemsPartially(req, res, next) {
+        Item.count()
+            .then(count => {
+                Item.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(items => {
+                    res.status(200).json(items);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getItemsById(req, res, next) {
         const { itemId } = req.params;
-        db.Item.findByPk(itemId)
+        Item.findByPk(itemId)
             .then(item => {
                 res.status(item ? 200 : 404).json(item ?? `item id=${itemId} not found`);
             })
@@ -21,7 +37,7 @@ class ItemController {
 
     createItem(req, res, next) {
         const { body } = req;
-        db.Item.create(body, {
+        Item.create(body, {
             returning: '*'
         })
             .then(item => {
@@ -36,7 +52,7 @@ class ItemController {
             return res.status(404).send('Can\'t find item. Please provide id in request body.');
         }
 
-        db.Item.update(req.body, {
+        Item.update(req.body, {
             where: {
                 id: Number(itemId)
             }
@@ -53,7 +69,7 @@ class ItemController {
     deleteItem(req, res, next) {
         const { params: {itemId }} = req;
         
-        db.Item.destroy({
+        Item.destroy({
             where: {
                 id: itemId
             }

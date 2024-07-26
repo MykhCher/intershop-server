@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Category, Sequelize: { Op } } = require('../db/models');
 
 class CategoryController {
     getAllCategories(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Category.findAll( {limit, offset} )
+        Category.findAll( {limit, offset} )
             .then(categories => {
                 res.status(200).send(categories);
             })
             .catch(err => next(err));
     }
 
+    getCategoriesPartially(req, res, next) {
+        Category.count()
+            .then(count => {
+                Category.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(categories => {
+                    res.status(200).json(categories);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getCategoriesById(req, res, next) {
         const { categoryId } = req.params;
-        db.Category.findByPk(categoryId)
+        Category.findByPk(categoryId)
             .then(category => {
                 res.status(category ? 200 : 404).json(category ?? `category id=${categoryId} not found`);
             })
@@ -21,7 +37,7 @@ class CategoryController {
 
     createCategory(req, res, next) {
         const { body } = req;
-        db.Category.create(body, {
+        Category.create(body, {
             returning: '*'
         })
             .then(category => {
@@ -36,7 +52,7 @@ class CategoryController {
             return res.status(404).send('Can\'t find category. Please provide id in request body.');
         }
 
-        db.Category.update(req.body, {
+        Category.update(req.body, {
             where: {
                 id: Number(categoryId)
             }
@@ -53,7 +69,7 @@ class CategoryController {
     deleteCategory(req, res, next) {
         const { params: {categoryId }} = req;
         
-        db.Category.destroy({
+        Category.destroy({
             where: {
                 id: categoryId
             }

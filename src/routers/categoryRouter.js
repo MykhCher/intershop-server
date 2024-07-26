@@ -11,6 +11,8 @@ categoryRouter.route('/')
     .post(validateInstance, categoryController.createCategory)
     .put(validateInstance, categoryController.updateCategory);
 
+categoryRouter.get('/part', categoryController.getCategoriesPartially);
+
 categoryRouter.route('/:categoryId')
     .get(categoryController.getCategoriesById)
     .delete(categoryController.deleteCategory);

@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Model, Sequelize: { Op } } = require('../db/models');
 
 class ModelController {
     getAllModels(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Model.findAll( {limit, offset} )
+        Model.findAll( {limit, offset} )
             .then(models => {
                 res.status(200).send(models);
             })
             .catch(err => next(err));
     }
 
+    getModelsPartially(req, res, next) {
+        Model.count()
+            .then(count => {
+                Model.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(models => {
+                    res.status(200).json(models);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getModelsById(req, res, next) {
         const { modelId } = req.params;
-        db.Model.findByPk(modelId)
+        Model.findByPk(modelId)
             .then(model => {
                 res.status(model ? 200 : 404).json(model ?? `model id=${modelId} not found`);
             })
@@ -21,7 +37,7 @@ class ModelController {
 
     createModel(req, res, next) {
         const { body } = req;
-        db.Model.create(body, {
+        Model.create(body, {
             returning: '*'
         })
             .then(model => {
@@ -36,7 +52,7 @@ class ModelController {
             return res.status(404).send('Can\'t find model. Please provide id in request body.');
         }
 
-        db.Model.update(req.body, {
+        Model.update(req.body, {
             where: {
                 id: Number(modelId)
             }
@@ -53,7 +69,7 @@ class ModelController {
     deleteModel(req, res, next) {
         const { params: {modelId }} = req;
         
-        db.Model.destroy({
+        Model.destroy({
             where: {
                 id: modelId
             }

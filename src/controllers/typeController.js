@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Type, Sequelize: { Op } } = require('../db/models');
 
 class TypeController {
     getAllTypes(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Type.findAll( {limit, offset} )
+        Type.findAll( {limit, offset} )
             .then(types => {
                 res.status(200).send(types);
             })
             .catch(err => next(err));
     }
 
+    getTypesPartially(req, res, next) {
+        Type.count()
+            .then(count => {
+                Type.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(types => {
+                    res.status(200).json(types);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getTypesById(req, res, next) {
         const { typeId } = req.params;
-        db.Type.findByPk(typeId)
+        Type.findByPk(typeId)
             .then(type => {
                 res.status(type ? 200 : 404).json(type ?? `type id=${typeId} not found`);
             })
@@ -21,7 +37,7 @@ class TypeController {
 
     createType(req, res, next) {
         const { body } = req;
-        db.Type.create(body, {
+        Type.create(body, {
             returning: '*'
         })
             .then(type => {
@@ -36,7 +52,7 @@ class TypeController {
             return res.status(404).send('Can\'t find type. Please provide id in request body.');
         }
 
-        db.Type.update(req.body, {
+        Type.update(req.body, {
             where: {
                 id: Number(typeId)
             }
@@ -53,7 +69,7 @@ class TypeController {
     deleteType(req, res, next) {
         const { params: {typeId }} = req;
         
-        db.Type.destroy({
+        Type.destroy({
             where: {
                 id: typeId
             }

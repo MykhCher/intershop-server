@@ -11,6 +11,8 @@ storeRouter.route('/')
     .post(validateInstance, storeController.createStore)
     .put(validateInstance, storeController.updateStore);
 
+storeRouter.get('/part', storeController.getStoresPartially);
+
 storeRouter.route('/:storeId')
     .get(storeController.getStoresById)
     .delete(storeController.deleteStore);

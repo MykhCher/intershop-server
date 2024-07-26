@@ -11,6 +11,8 @@ modelRouter.route('/')
     .post(validateInstance, modelController.createModel)
     .put(validateInstance, modelController.updateModel);
 
+modelRouter.get('/part', modelController.getModelsPartially);
+
 modelRouter.route('/:modelId')
     .get(modelController.getModelsById)
     .delete(modelController.deleteModel);

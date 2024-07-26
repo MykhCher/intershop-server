@@ -11,6 +11,8 @@ customerRouter.route('/')
     .post(validateCustomer, customerController.createCustomer)
     .put(validateCustomer, customerController.updateCustomer);
 
+customerRouter.get('/part', customerController.getCustomersPartially);
+
 customerRouter.route('/:customerId')
     .get(customerController.getCustomersById)
     .delete(customerController.deleteCustomer);

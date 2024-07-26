@@ -1,3 +1,7 @@
+### Get half of elements 
+
+GET http://127.0.0.1:5000/types/part
+
 ### Paginate elements
 
 GET http://127.0.0.1:5000/types/?page=1&result=3

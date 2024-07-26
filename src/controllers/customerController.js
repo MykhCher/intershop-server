@@ -1,18 +1,34 @@
-const db = require('../db/models');
+const { Customer, Sequelize: { Op } } = require('../db/models');
 
 class CustomerController {
     getAllCustomers(req, res, next) {
         const { limit, offset } = req.pagination;
-        db.Customer.findAll( {limit, offset} )
+        Customer.findAll( {limit, offset} )
             .then(customers => {
                 res.status(200).send(customers);
             })
             .catch(err => next(err));
     }
 
+    getCustomersPartially(req, res, next) {
+        Customer.count()
+            .then(count => {
+                Customer.findAll({
+                    where: {
+                        id: {
+                            [Op.gt]: Math.floor(count/2)
+                        }
+                    },
+                }).then(customers => {
+                    res.status(200).json(customers);
+                });
+            })
+            .catch(err => next(err));
+    }
+
     getCustomersById(req, res, next) {
         const { customerId } = req.params;
-        db.Customer.findByPk(customerId)
+        Customer.findByPk(customerId)
             .then(customer => {
                 res.status(customer ? 200 : 404).json(customer ?? `customer id=${customerId} not found`);
             })
@@ -21,7 +37,7 @@ class CustomerController {
 
     createCustomer(req, res, next) {
         const { body } = req;
-        db.Customer.create(body, {
+        Customer.create(body, {
             returning: '*'
         })
             .then(customer => {
@@ -36,7 +52,7 @@ class CustomerController {
             return res.status(404).send('Can\'t find customer. Please provide id in request body.');
         }
 
-        db.Customer.update(req.body, {
+        Customer.update(req.body, {
             where: {
                 id: Number(customerId)
             }
@@ -53,7 +69,7 @@ class CustomerController {
     deleteCustomer(req, res, next) {
         const { params: {customerId }} = req;
         
-        db.Customer.destroy({
+        Customer.destroy({
             where: {
                 id: customerId
             }

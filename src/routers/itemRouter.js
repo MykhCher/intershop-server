@@ -11,6 +11,8 @@ itemRouter.route('/')
     .post(validateItem, itemController.createItem)
     .put(validateItem, itemController.updateItem);
 
+itemRouter.get('/part', itemController.getItemsPartially);
+
 itemRouter.route('/:itemId')
     .get(itemController.getItemsById)
     .delete(itemController.deleteItem);
