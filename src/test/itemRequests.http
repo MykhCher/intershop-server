@@ -2,10 +2,6 @@
 
 GET http://127.0.0.1:5000/items/part
 
-### Get elements by attribute name
-
-GET http://127.0.0.1:5000/items/attr?category=Sports&brand=Samsung&brand=Intel&id=2
-
 ### Get filtered items
 
 GET http://127.0.0.1:5000/items/filter?type=TV
