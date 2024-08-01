@@ -63,10 +63,9 @@ class ItemController {
         const promises = Object.keys(req.query).map(async fieldName => {
             if ( fieldName.match(/(brand|model|store|type|category)/) ) {
 
-                const [instanceName] = fieldName.match(/(brand|model|store|type|category)/);
                 let queryResult;
 
-                switch (instanceName) {
+                switch (fieldName) {
                     case 'brand':
                         queryResult = await Brand.findOne({where: {
                             title: req.query[fieldName]
@@ -97,7 +96,7 @@ class ItemController {
                 await Item.findAll({
                     attributes: ['id', 'price', 'amount'],
                     where: {
-                        [`${instanceName}Id`]: queryResult.id
+                        [`${fieldName}Id`]: queryResult.id
                     },
                     include: includeOptions,
                     raw : true
