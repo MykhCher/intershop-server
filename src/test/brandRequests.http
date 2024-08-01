@@ -4,7 +4,7 @@ GET http://127.0.0.1:5000/brands/part
 
 ### Get elements by attribute name
 
-GET http://127.0.0.1:5000/brands/attr?id=3&&title=Intel
+GET http://127.0.0.1:5000/brands/attr?title=AMD&title=Intel
 
 ### Paginate elements
 

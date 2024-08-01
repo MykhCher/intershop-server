@@ -28,40 +28,23 @@ class BrandController {
             .catch(err => next(err));
     }
 
-    getBrandsByAttributes(req, res, next) {
-
-        const response = [];
-
-        const promises = Object.keys(req.query).map(async fieldName => {
-            if (req.query[fieldName] instanceof Array) {
-                await Brand.findAll({
-                    where: {
-                        [fieldName] : {
-                            [Op.in] : req.query[fieldName]
-                        }
-                    }})
-                        .then(items => {
-                            response.push(...items);
-                    })
-            } else {
-                await Brand.findOne({
-                    where: {
-                        [fieldName]: req.query[fieldName]
-                    }})
-                        .then(item => {
-                            if (item) response.push(item);
-                        })
-            }
-        });
-
-        Promise.all(promises)
-            .then(() => {
-                response[0] 
-                    ? res.status(200).json(response)
-                    : next(createError(404, 'Found no items matching your query :('));
+    getBrandsByTitles(req, res, next) {
+        const { title } = req.query;
+        Brand.findAll({where: {
+            title: title instanceof Array 
+            ? {
+                [Op.in]: title
+                }
+            : title
+        }})
+            .then(brands => {
+                brands[0]
+                    ? res.status(200).json(brands)
+                    : next(createError(404, 'brands not found'));
             })
             .catch(err => next(err));
 
+            
     }
 
     getBrandsById(req, res, next) {
