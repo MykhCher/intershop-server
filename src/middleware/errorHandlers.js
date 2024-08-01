@@ -31,6 +31,7 @@ module.exports.errorHandler = (err, req, res, next) => {
     res.status(err?.status ?? 500).send({
         errors: [{
             title: err?.name ?? `Internal server error`,
-            details: err?.message ?? `Something went wrong`}],
+            details: err?.message ?? `Something went wrong`,
+            more: err.stack}],
     });
 }

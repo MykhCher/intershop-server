@@ -4,7 +4,7 @@ GET http://127.0.0.1:5000/items/part
 
 ### Get elements by attribute name
 
-GET http://127.0.0.1:5000/items/attr?id=3&type=Processors
+GET http://127.0.0.1:5000/items/attr?category=Sports&brand=Samsung&brand=Intel&id=2
 
 ### Paginate elements
 

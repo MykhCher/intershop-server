@@ -67,28 +67,48 @@ class ItemController {
 
                 switch (fieldName) {
                     case 'brand':
-                        queryResult = await Brand.findOne({where: {
-                            title: req.query[fieldName]
+                        queryResult = await [`${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`].findAll({where: {
+                            title: req.query[fieldName] instanceof Array 
+                            ? {
+                                [Op.in]: req.query[fieldName]
+                              } 
+                            : req.query[fieldName]
                         }})
                         break;
                     case 'model':
-                        queryResult = await Model.findOne({where: {
-                            title: req.query[fieldName]
+                        queryResult = await Model.findAll({where: {
+                            title: req.query[fieldName] instanceof Array 
+                            ? {
+                                [Op.in]: req.query[fieldName]
+                              } 
+                            : req.query[fieldName]
                         }})
                         break;
                     case 'store':
-                        queryResult = await Store.findOne({where: {
-                            title: req.query[fieldName]
+                        queryResult = await Store.findAll({where: {
+                            title: req.query[fieldName] instanceof Array 
+                            ? {
+                                [Op.in]: req.query[fieldName]
+                              } 
+                            : req.query[fieldName]
                         }})
                         break;
                     case 'type':
-                        queryResult = await Type.findOne({where: {
-                            title: req.query[fieldName]
+                        queryResult = await Type.findAll({where: {
+                            title: req.query[fieldName] instanceof Array 
+                            ? {
+                                [Op.in]: req.query[fieldName]
+                              } 
+                            : req.query[fieldName]
                         }})
                         break;
                     case 'category':
-                        queryResult = await Category.findOne({where: {
-                            title: req.query[fieldName]
+                        queryResult = await Category.findAll({where: {
+                            title: req.query[fieldName] instanceof Array 
+                            ? {
+                                [Op.in]: req.query[fieldName]
+                              } 
+                            : req.query[fieldName]
                         }})
                         break;
                 }
@@ -96,38 +116,34 @@ class ItemController {
                 await Item.findAll({
                     attributes: ['id', 'price', 'amount'],
                     where: {
-                        [`${fieldName}Id`]: queryResult.id
+                        [`${fieldName}Id`]: queryResult instanceof Array 
+                            ? {
+                                [Op.in]: queryResult.map(item => item.id)
+                              } 
+                            : queryResult[0].id
                     },
                     include: includeOptions,
                     raw : true
                 }).then(items => {response.push(...items)});
 
-            } else if (req.query[fieldName] instanceof Array) {
+            } else {
+                console.log(fieldName, req.query[fieldName])
                 await Item.findAll({
                     attributes: ['id', 'price', 'amount'], 
                     where: {
-                        [fieldName] : {
+                        [fieldName] : req.query[fieldName] instanceof Array 
+                        ? {
                             [Op.in] : req.query[fieldName]
-                        },
-                    include: includeOptions,
-                    raw: true
-                    }})
-                        .then(items => {
-                            response.push(...items);
-                        })
-            } else {
-                await Item.findOne({
-                    attributes: ['id', 'price', 'amount'], 
-                    where: {
-                        [fieldName]: req.query[fieldName]
+                          } 
+                        : req.query[fieldName],
                     },
                     include: includeOptions,
                     raw: true
                 })
-                    .then(item => {
-                        if (item) response.push(item); 
+                    .then(items => {
+                        response.push(...items);
                     })
-            }
+            } 
         });
 
         Promise.all(promises)
