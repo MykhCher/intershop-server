@@ -1,36 +1,13 @@
 const createError = require('http-errors');
 
 const { Item, Brand, Model, Store, Category, Type, Sequelize: { Op } } = require('../db/models');
-
-
-const includeOptions = [
-    {
-        model: Category,
-        attributes: ['title']
-    },
-    {
-        model: Type,
-        attributes: ['title']
-    },
-    {
-        model: Brand,
-        attributes: ['title']
-    },
-    {
-        model: Model,
-        attributes: ['title']
-    },
-    {
-        model: Store,
-        attributes: ['title']
-    },
-];
+const { itemIncludeOptions } = require('../constants');
 
 
 class ItemController {
     getAllItems(req, res, next) {
         const { limit, offset } = req.pagination;
-        Item.findAll( {attributes: ['id', 'price', 'amount'], limit, offset, include: includeOptions, raw: true} )
+        Item.findAll( {attributes: ['id', 'price', 'amount'], limit, offset, include: itemIncludeOptions, raw: true} )
             .then(items => {
                 res.status(200).send(items[0] ? items : 'It seems to be empty here... \nPlease, try different request');
             })
@@ -47,7 +24,7 @@ class ItemController {
                             [Op.gt]: Math.floor(count/2)
                         }
                     },
-                    include: includeOptions,
+                    include: itemIncludeOptions,
                     raw: true
                 }).then(items => {
                     res.status(200).json(items);
@@ -57,36 +34,57 @@ class ItemController {
     }
 
     async getFilteredItems(req, res, next) {
-        const {brand, model, category, type, store} = req.query;
+        const { brand, model, category, type, store } = req.query;
         try {
-            const {id: categoryId} = category ? await Category.findOne({where: {title: category}}) : 0;
-            const {id: modelId} = model ? await Model.findOne({where: {title: model}}) : 0;
-            const {id: typeId} = type ? await Type.findOne({where: {title: type}}) : 0;
-            const {id: brandId} = brand ? await Brand.findOne({where: {title: brand}}) : 0;
-            const {id: storeId} = store ? await Store.findOne({where: {title: store}}) : 0;
-    
-            const items = Item.findAll({
+
+            const categoryId = category ? await Category.findAll({where: {title: category}}) : 0;
+            const modelId = model ? await Model.findAll({where: {title: model}}) : 0;
+            const typeId = type ? await Type.findAll({where: {title: type}}) : 0;
+            const brandId = brand ? await Brand.findAll({where: {title: brand}}) : 0;
+            const storeId = store ? await Store.findAll({where: {title: store}}) : 0;
+
+            const items = await Item.findAll({
                 attributes: ['id', 'price', 'amount'], 
                 where: {
-                    brandId: brandId ?? {
-                        [Op.gt]: 0
-                    }, 
-                    categoryId: categoryId ?? {
-                        [Op.gt]: 0
-                    },
-                    modelId: modelId ?? {
-                        [Op.gt]: 0
-                    }, 
-                    storeId: storeId ?? {
-                        [Op.gt]: 0
-                    },
-                    typeId: typeId ?? {
-                        [Op.gt]: 0
-                    },
+                    brandId: brandId 
+                        ? {
+                            [Op.in]: brandId.map(brand => brand.id)
+                        } 
+                        : {
+                            [Op.gt]: 0
+                        }, 
+                    categoryId: categoryId 
+                        ? {
+                            [Op.in]: categoryId.map(category => category.id)
+                        } 
+                        : {
+                            [Op.gt]: 0
+                        },
+                    modelId: modelId 
+                        ? {
+                            [Op.in]: modelId.map(model => model.id)
+                        } 
+                        : {
+                            [Op.gt]: 0
+                        }, 
+                    storeId: storeId 
+                        ? {
+                            [Op.in]: storeId.map(store => store.id)
+                        } 
+                        : {
+                            [Op.gt]: 0
+                        },
+                    typeId: typeId 
+                        ? {
+                            [Op.in]: typeId.map(type => type.id)
+                        } 
+                        : {
+                            [Op.gt]: 0
+                        },
                 },
-                include: includeOptions,
-                raw: true
-            })
+                include: itemIncludeOptions,
+                raw: true,
+            });
 
             items[0]
                 ? res.status(200).json(items)
@@ -99,11 +97,10 @@ class ItemController {
             next(error);
         }
     }
-
     
     getItemsById(req, res, next) {
         const { itemId } = req.params;
-        Item.findByPk(itemId, { attributes: ['id', 'price', 'amount'], include: includeOptions, raw: true})
+        Item.findByPk(itemId, { attributes: ['id', 'price', 'amount'], include: itemIncludeOptions, raw: true})
             .then(item => {
                 res.status(item ? 200 : 404).json(item ?? `item id=${itemId} not found`);
             })
