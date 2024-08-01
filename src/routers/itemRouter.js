@@ -12,6 +12,7 @@ itemRouter.route('/')
     .put(validateItem, itemController.updateItem);
 
 itemRouter.get('/part', itemController.getItemsPartially);
+itemRouter.get('/attr', itemController.getItemsByAttributes);
 
 itemRouter.route('/:itemId')
     .get(itemController.getItemsById)
