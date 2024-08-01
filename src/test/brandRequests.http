@@ -2,13 +2,17 @@
 
 GET http://127.0.0.1:5000/brands/part
 
+### Get elements by attribute name
+
+GET http://127.0.0.1:5000/brands/attr?id=3&&title=Intel
+
 ### Paginate elements
 
-GET http://127.0.0.1:5000/brands?page=3&result=6
+GET http://127.0.0.1:5000/brands?page=1&result=100
 
 ### Get single element by ID
 
-GET http://127.0.0.1:5000/brands/1
+GET http://127.0.0.1:5000/brands/20
 
 ### Create new element
 
@@ -25,7 +29,7 @@ PUT http://127.0.0.1:5000/brands/
 Content-Type: application/json
 
     {
-        "id": 34,
+        "id": 20,
         "title": "Hator"
     }
 

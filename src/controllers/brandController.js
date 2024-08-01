@@ -1,5 +1,7 @@
 const { Brand, Sequelize: { Op } } = require('../db/models');
 
+const createError = require('http-errors');
+
 class BrandController {
     getAllBrands(req, res, next) {
         const { limit, offset } = req.pagination;
@@ -24,6 +26,47 @@ class BrandController {
                 });
             })
             .catch(err => next(err));
+    }
+
+    getBrandsByAttributes(req, res, next) {
+
+        const response = [];
+
+        const promises = Object.keys(req.query).map(async fieldName => {
+            if (req.query[fieldName] instanceof Array) {
+                await Brand.findAll({
+                    where: {
+                        [fieldName] : {
+                            [Op.in] : req.query[fieldName]
+                        }
+                    }})
+                        .then(items => {
+                            response.push(...items);
+                    })
+                        .catch(err => {
+                            console.log(err.errors);
+                            next(err);
+                        });
+            } else {
+                await Brand.findOne({
+                    where: {
+                        [fieldName]: req.query[fieldName]
+                    }})
+                        .then(item => {
+                            if (item) response.push(item);
+                        })
+                        .catch(err => next(err));
+            }
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                response[0] 
+                    ? res.status(200).json(response)
+                    : next(createError(404, 'Found no items matching your query :('));
+            })
+            .catch(err => next(err));
+
     }
 
     getBrandsById(req, res, next) {

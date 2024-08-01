@@ -12,6 +12,7 @@ brandRouter.route('/')
     .put(validateInstance, brandController.updateBrand);
 
 brandRouter.get('/part', brandController.getBrandsPartially);
+brandRouter.get('/attr', brandController.getBrandsByAttributes);
 
 brandRouter.route('/:brandId')
     .get(brandController.getBrandsById)
