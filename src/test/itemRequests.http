@@ -8,7 +8,7 @@ GET http://127.0.0.1:5000/items/attr?category=Sports&brand=Samsung&brand=Intel&i
 
 ### Get filtered items
 
-GET http://127.0.0.1:5000/items/filter?category=Appliances&brand=Samsung
+GET http://127.0.0.1:5000/items/filter?type=TV
 
 ### Paginate elements
 

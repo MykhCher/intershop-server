@@ -104,7 +104,7 @@ class ItemController {
 
                 switch (fieldName) {
                     case 'brand':
-                        queryResult = await [`${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`].findAll({where: {
+                        queryResult = await Brand.findAll({where: {
                             title: req.query[fieldName] instanceof Array 
                             ? {
                                 [Op.in]: req.query[fieldName]
