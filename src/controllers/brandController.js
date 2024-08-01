@@ -43,10 +43,6 @@ class BrandController {
                         .then(items => {
                             response.push(...items);
                     })
-                        .catch(err => {
-                            console.log(err.errors);
-                            next(err);
-                        });
             } else {
                 await Brand.findOne({
                     where: {
@@ -55,7 +51,6 @@ class BrandController {
                         .then(item => {
                             if (item) response.push(item);
                         })
-                        .catch(err => next(err));
             }
         });
 
