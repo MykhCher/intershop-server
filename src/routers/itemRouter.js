@@ -13,6 +13,7 @@ itemRouter.route('/')
 
 itemRouter.get('/part', itemController.getItemsPartially);
 itemRouter.get('/attr', itemController.getItemsByAttributes);
+itemRouter.get('/filter', itemController.getFilteredItems);
 
 itemRouter.route('/:itemId')
     .get(itemController.getItemsById)

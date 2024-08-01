@@ -6,9 +6,13 @@ GET http://127.0.0.1:5000/items/part
 
 GET http://127.0.0.1:5000/items/attr?category=Sports&brand=Samsung&brand=Intel&id=2
 
+### Get filtered items
+
+GET http://127.0.0.1:5000/items/filter?category=Appliances&brand=Samsung
+
 ### Paginate elements
 
-GET http://127.0.0.1:5000/items/?page=3&result=6 
+GET http://127.0.0.1:5000/items/?page=1&result=60 
 
 ### Get single element by ID
 

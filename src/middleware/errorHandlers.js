@@ -32,6 +32,6 @@ module.exports.errorHandler = (err, req, res, next) => {
         errors: [{
             title: err?.name ?? `Internal server error`,
             details: err?.message ?? `Something went wrong`,
-            more: err.stack}],
+        }],
     });
 }
