@@ -59,14 +59,13 @@ class ItemController {
     async getFilteredItems(req, res, next) {
         const {brand, model, category, type, store} = req.query;
         try {
-    
             const {id: categoryId} = category ? await Category.findOne({where: {title: category}}) : 0;
             const {id: modelId} = model ? await Model.findOne({where: {title: model}}) : 0;
             const {id: typeId} = type ? await Type.findOne({where: {title: type}}) : 0;
             const {id: brandId} = brand ? await Brand.findOne({where: {title: brand}}) : 0;
             const {id: storeId} = store ? await Store.findOne({where: {title: store}}) : 0;
     
-            Item.findAll({
+            const items = Item.findAll({
                 attributes: ['id', 'price', 'amount'], 
                 where: {
                     brandId: brandId ?? {
@@ -88,11 +87,11 @@ class ItemController {
                 include: includeOptions,
                 raw: true
             })
-                .then(items => {
-                    res.send(items);
-                })
-                .catch(err => next(err));
-            
+
+            items[0]
+                ? res.status(200).json(items)
+                : next(createError(404, `items not found`));
+                
         } catch (error) {
             if( error.name === 'TypeError') {
                 return next(createError(500, `Cannot find entered fields`));
