@@ -58,39 +58,47 @@ class ItemController {
 
     async getFilteredItems(req, res, next) {
         const {brand, model, category, type, store} = req.query;
-
-        const {id: categoryId} = category ? await Category.findOne({where: {title: category}}) : 0;
-        const {id: modelId} = model ? await Model.findOne({where: {title: model}}) : 0;
-        const {id: typeId} = type ? await Type.findOne({where: {title: type}}) : 0;
-        const {id: brandId} = brand ? await Brand.findOne({where: {title: brand}}) : 0;
-        const {id: storeId} = store ? await Store.findOne({where: {title: store}}) : 0;
-
-        Item.findAll({
-            attributes: ['id', 'price', 'amount'], 
-            where: {
-                brandId: brandId ?? {
-                    [Op.gt]: 0
-                }, 
-                categoryId: categoryId ?? {
-                    [Op.gt]: 0
+        try {
+    
+            const {id: categoryId} = category ? await Category.findOne({where: {title: category}}) : 0;
+            const {id: modelId} = model ? await Model.findOne({where: {title: model}}) : 0;
+            const {id: typeId} = type ? await Type.findOne({where: {title: type}}) : 0;
+            const {id: brandId} = brand ? await Brand.findOne({where: {title: brand}}) : 0;
+            const {id: storeId} = store ? await Store.findOne({where: {title: store}}) : 0;
+    
+            Item.findAll({
+                attributes: ['id', 'price', 'amount'], 
+                where: {
+                    brandId: brandId ?? {
+                        [Op.gt]: 0
+                    }, 
+                    categoryId: categoryId ?? {
+                        [Op.gt]: 0
+                    },
+                    modelId: modelId ?? {
+                        [Op.gt]: 0
+                    }, 
+                    storeId: storeId ?? {
+                        [Op.gt]: 0
+                    },
+                    typeId: typeId ?? {
+                        [Op.gt]: 0
+                    },
                 },
-                modelId: modelId ?? {
-                    [Op.gt]: 0
-                }, 
-                storeId: storeId ?? {
-                    [Op.gt]: 0
-                },
-                typeId: typeId ?? {
-                    [Op.gt]: 0
-                },
-            },
-            include: includeOptions,
-            raw: true
-        })
-            .then(items => {
-                res.send(items);
+                include: includeOptions,
+                raw: true
             })
-            .catch(err => next(err));
+                .then(items => {
+                    res.send(items);
+                })
+                .catch(err => next(err));
+            
+        } catch (error) {
+            if( error.name === 'TypeError') {
+                return next(createError(500, `Cannot find entered fields`));
+            }
+            next(error);
+        }
     }
 
     
