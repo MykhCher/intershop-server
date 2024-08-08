@@ -30,6 +30,29 @@ class MiscController {
             })
             .catch(next);
     }
+
+    customerWithMostOrders(req, res, next) {
+        db.Order.findAll({
+            attributes: [[db.Sequelize.fn('COUNT', db.Sequelize.col('Order.id')), 'orders']],
+            include: [db.Customer],
+            group: ['Customer.id'],
+            raw: true,
+            order: [['orders', 'DESC']],
+            limit: 1
+        })
+            .then(rows => {
+                const result = rows.map(row => {
+                    return {
+                        "full_name": row['Customer.full_name'],
+                        "orders": row.orders
+                    }
+                });
+
+                res.send(result)
+
+            })
+            .catch(next);
+    }
 }
 
 module.exports = new MiscController();
