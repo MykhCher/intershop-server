@@ -59,7 +59,7 @@ class MiscController {
         db.ItemOrder.findAll({
             attributes: [
                 'orderId', 
-                [db.Sequelize.literal('SUM("ItemOrder"."amount" * "Item"."price")'), 'total'],
+                [db.Sequelize.fn('SUM', db.sequelize.literal('("ItemOrder"."amount" * "Item"."price")')), 'total'],
                 [db.Sequelize.col('"Order->Customer"."full_name"'), 'full_name']
             ],
             include: [
