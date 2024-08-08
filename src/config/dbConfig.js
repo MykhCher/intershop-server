@@ -9,7 +9,7 @@ module.exports = {
     dialect: 'postgres',
     migrationStorage: 'json',
     seederStorage: 'json',
-    logging: false
+    // logging: false
   },
   test: {},
   production: {}

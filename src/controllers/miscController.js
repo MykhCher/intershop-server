@@ -1,3 +1,4 @@
+const { col } = require('sequelize');
 const db = require('../db/models');
 
 class MiscController {
@@ -50,6 +51,37 @@ class MiscController {
 
                 res.send(result)
 
+            })
+            .catch(next);
+    }
+
+    topPriceOrder(req, res, next) {
+        db.ItemOrder.findAll({
+            attributes: [
+                'orderId', 
+                [db.Sequelize.literal('SUM("ItemOrder"."amount" * "Item"."price")'), 'total'],
+                [db.Sequelize.col('"Order->Customer"."full_name"'), 'full_name']
+            ],
+            include: [
+                {
+                    model: db.Item, 
+                    attributes: []
+                },
+                {
+                    model: db.Order,
+                    attributes: [],
+                    include: {
+                        model: db.Customer,
+                        attributes: ['full_name']
+                    }
+                }
+            ],
+            group: ['ItemOrder.orderId', '"Order->Customer".id'],
+            order: [['total', 'DESC']],
+            limit: 1
+        })
+            .then(result => {
+                res.json(result);
             })
             .catch(next);
     }
