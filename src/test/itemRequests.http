@@ -48,3 +48,7 @@ Content-Type: application/json
 ### Delete element by ID
 
 DELETE http://127.0.0.1:5000/items/46
+
+### Delete element by Brands
+
+DELETE http://127.0.0.1:5000/items/delete-brand?brands=Samsung&brands=Tefal

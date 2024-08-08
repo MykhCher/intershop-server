@@ -155,6 +155,39 @@ class ItemController {
             .catch(err => next(err));
     }
 
+    deleteItemByBrand(req, res, next) {
+        const { query: {brands} } = req;
+
+        if (!brands) {
+            return res.next(createError(500, 'cannot find `brands`'));
+        }
+
+        Brand.findAll({where: {
+            title: brands instanceof Array 
+            ? {
+                [Op.in]: brands
+            }
+            : brands
+        }})
+            .then(idArr => {
+                Item.destroy({attributes: ['id', 'price', 'amount'], 
+                    include: itemIncludeOptions, 
+                    raw: true, 
+                    where: {
+                    brandId: {
+                        [Op.in]: idArr.map(brand => brand.id)
+                    }
+                }})
+                .then(deletedItems => {
+                    deletedItems
+                        ? res.status(202).send(`deleted ${deletedItems} items`)
+                        : res.send(createError(404, 'cant find items of chosen brands'));
+                })
+            })
+            .catch(err => next(err));
+
+    }
+
 }
 
 module.exports = new ItemController();

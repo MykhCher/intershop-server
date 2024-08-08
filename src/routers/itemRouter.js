@@ -13,6 +13,7 @@ itemRouter.route('/')
 
 itemRouter.get('/part', itemController.getItemsPartially);
 itemRouter.get('/filter', itemController.getFilteredItems);
+itemRouter.delete('/delete-brand', itemController.deleteItemByBrand);
 
 itemRouter.route('/:itemId')
     .get(itemController.getItemsById)
