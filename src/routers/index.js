@@ -6,6 +6,7 @@ const customerRouter = require('./customerRouter');
 const orderRouter = require('./orderRouter');
 const storeRouter = require('./storeRouter');
 const typeRouter = require('./typeRouter');
+const miscRouter = require('./miscRouter');
 
 const { Router } = require('express');
 
@@ -20,6 +21,7 @@ shopRouter.use('/customers', customerRouter);
 shopRouter.use('/orders', orderRouter);
 shopRouter.use('/stores', storeRouter);
 shopRouter.use('/types', typeRouter);
+shopRouter.use('/misc', miscRouter);
 
 
 module.exports = shopRouter;
