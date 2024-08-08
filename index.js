@@ -26,6 +26,12 @@ const dbCheck = () => {
     });
 }
 
+const dbSync = () => {
+    db.sequelize.sync()
+        .then(() => {console.log('Db synced')})
+        .catch(err => {console.log(`Sync error: ${err}`)})
+}
+
 server.listen(port, hostName, () => {
     const address = `http${isSecure ? 's' : ''}://${hostName}:${port}`;
 
@@ -34,4 +40,4 @@ server.listen(port, hostName, () => {
 });
 
 dbCheck();
-
+// dbSync();

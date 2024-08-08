@@ -11,7 +11,8 @@
     "migall": "npx sequelize-cli db:migrate",
     "miguna": "npx sequelize-cli db:migrate:undo:all",
     "seedall": "npx sequelize-cli db:seed:all",
-    "seeduna": "npx sequelize-cli db:seed:undo:all"
+    "seeduna": "npx sequelize-cli db:seed:undo:all",
+    "dbreinit": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run migall && npm run seedall"
   },
   "keywords": [],
   "author": "",
