@@ -1,4 +1,3 @@
-const { col } = require('sequelize');
 const db = require('../db/models');
 
 class MiscController {
@@ -13,44 +12,47 @@ class MiscController {
 
     itemTypesInStores(req, res, next) {
         db.Item.findAll({
-            attributes: [[db.Sequelize.fn('SUM', db.Sequelize.col('amount')), 'total_amount']],
-            include: [db.Store, db.Type],
+            attributes: [
+                [db.Sequelize.col('Store.title'), 'store_title'],
+                [db.Sequelize.col('Type.title'), 'type_title'],
+                [db.Sequelize.fn('SUM', db.Sequelize.col('amount')), 'items_count']
+            ],
+            include: [
+                {
+                    model: db.Store,
+                    attributes: []
+                }, 
+                {
+                    model:db.Type,
+                    attributes: []
+                }
+            ],
             group: ['Store.id', 'Type.id'],
             raw: true
         })
             .then(rows => {
-                const result = rows.map(row => {
-                    return {
-                        "type_title": row['Type.title'],
-                        "store_title": row['Store.title'],
-                        "total_amount": Number(row.total_amount),
-                    }
-                });
-
-                res.json(result);
+                res.json(rows);
             })
             .catch(next);
     }
 
     customerWithMostOrders(req, res, next) {
         db.Order.findAll({
-            attributes: [[db.Sequelize.fn('COUNT', db.Sequelize.col('Order.id')), 'orders']],
-            include: [db.Customer],
+            attributes: [
+                [db.Sequelize.col('Customer.full_name'), 'customer_name'],
+                [db.Sequelize.fn('COUNT', db.Sequelize.col('Order.id')), 'orders_count'], 
+            ],
+            include: {
+                model: db.Customer,
+                attributes: []
+            },
             group: ['Customer.id'],
             raw: true,
-            order: [['orders', 'DESC']],
+            order: [['orders_count', 'DESC']],
             limit: 1
         })
             .then(rows => {
-                const result = rows.map(row => {
-                    return {
-                        "full_name": row['Customer.full_name'],
-                        "orders": row.orders
-                    }
-                });
-
-                res.send(result)
-
+                res.json(rows)
             })
             .catch(next);
     }
@@ -58,9 +60,9 @@ class MiscController {
     topPriceOrder(req, res, next) {
         db.ItemOrder.findAll({
             attributes: [
+                [db.Sequelize.col('"Order->Customer"."full_name"'), 'full_name'],
+                [db.Sequelize.fn('SUM', db.sequelize.literal('("ItemOrder"."amount" * "Item"."price")')), 'order_price'],
                 'orderId', 
-                [db.Sequelize.fn('SUM', db.sequelize.literal('("ItemOrder"."amount" * "Item"."price")')), 'total'],
-                [db.Sequelize.col('"Order->Customer"."full_name"'), 'full_name']
             ],
             include: [
                 {
@@ -77,7 +79,7 @@ class MiscController {
                 }
             ],
             group: ['ItemOrder.orderId', '"Order->Customer".id'],
-            order: [['total', 'DESC']],
+            order: [['order_price', 'DESC']],
             limit: 1
         })
             .then(result => {
