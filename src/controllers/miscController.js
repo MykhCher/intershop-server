@@ -13,18 +13,16 @@ class MiscController {
     itemTypesInStores(req, res, next) {
         db.Item.findAll({
             attributes: [
-                [db.Sequelize.col('Store.title'), 'store_title'],
-                [db.Sequelize.col('Type.title'), 'type_title'],
                 [db.Sequelize.fn('SUM', db.Sequelize.col('amount')), 'items_count']
             ],
             include: [
                 {
                     model: db.Store,
-                    attributes: []
+                    attributes: ['title']
                 }, 
                 {
                     model:db.Type,
-                    attributes: []
+                    attributes: ['title']
                 }
             ],
             group: ['Store.id', 'Type.id'],
@@ -39,15 +37,13 @@ class MiscController {
     customerWithMostOrders(req, res, next) {
         db.Order.findAll({
             attributes: [
-                [db.Sequelize.col('Customer.full_name'), 'customer_name'],
                 [db.Sequelize.fn('COUNT', db.Sequelize.col('Order.id')), 'orders_count'], 
             ],
             include: {
                 model: db.Customer,
-                attributes: []
+                attributes: ['full_name']
             },
             group: ['Customer.id'],
-            raw: true,
             order: [['orders_count', 'DESC']],
             limit: 1
         })
@@ -74,7 +70,7 @@ class MiscController {
                     attributes: [],
                     include: {
                         model: db.Customer,
-                        attributes: ['full_name']
+                        attributes: []
                     }
                 }
             ],
