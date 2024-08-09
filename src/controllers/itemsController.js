@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 
 const { Item, Brand, Model, Store, Category, Type, Sequelize: { Op } } = require('../db/models');
-const { itemIncludeOptions } = require('../constants');
+const { itemIncludeOptions, checkQuery } = require('../constants');
 
 
 class ItemController {
@@ -46,41 +46,11 @@ class ItemController {
             const items = await Item.findAll({
                 attributes: ['id', 'price', 'amount'], 
                 where: {
-                    brandId: brandId 
-                        ? {
-                            [Op.in]: brandId.map(brand => brand.id)
-                        } 
-                        : {
-                            [Op.gt]: 0
-                        }, 
-                    categoryId: categoryId 
-                        ? {
-                            [Op.in]: categoryId.map(category => category.id)
-                        } 
-                        : {
-                            [Op.gt]: 0
-                        },
-                    modelId: modelId 
-                        ? {
-                            [Op.in]: modelId.map(model => model.id)
-                        } 
-                        : {
-                            [Op.gt]: 0
-                        }, 
-                    storeId: storeId 
-                        ? {
-                            [Op.in]: storeId.map(store => store.id)
-                        } 
-                        : {
-                            [Op.gt]: 0
-                        },
-                    typeId: typeId 
-                        ? {
-                            [Op.in]: typeId.map(type => type.id)
-                        } 
-                        : {
-                            [Op.gt]: 0
-                        },
+                    brandId: checkQuery(brandId), 
+                    categoryId: checkQuery(categoryId),
+                    modelId: checkQuery(modelId), 
+                    storeId: checkQuery(storeId),
+                    typeId: checkQuery(typeId),
                 },
                 include: itemIncludeOptions,
                 raw: true,

@@ -1,4 +1,4 @@
-const { Brand, Model, Store, Category, Type } = require('../db/models');
+const { Brand, Model, Store, Category, Type, Sequelize: { Op } } = require('../db/models');
 
 module.exports.itemIncludeOptions = [
     {
@@ -22,3 +22,13 @@ module.exports.itemIncludeOptions = [
         attributes: ['title']
     },
 ];
+
+module.exports.checkQuery = (field) => {
+    return field 
+        ? {
+            [Op.in]: field.map(model => model.id)
+        } 
+        : {
+            [Op.gt]: 0
+        }
+}
